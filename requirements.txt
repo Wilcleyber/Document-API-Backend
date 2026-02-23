@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+asyncpg
+passlib[bcrypt]
+PyJWT
+python-json-logger
+pydantic-settings
+python-dotenv
+python-jose
+pytest
+pytest-asyncio
+httpx
+
+email-validator
+
