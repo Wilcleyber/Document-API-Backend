@@ -1,4 +1,4 @@
-from passlib.hash import bcrypt
+from passlib.context import CryptContext
 from typing import Optional
 from src.db.connection import DatabasePool
 from src.users.schemas import UserCreate, UserOut, DemoCredentials
@@ -7,13 +7,15 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 DEFAULT_ROLE = "USER"
 DEMO_USERNAME = "demo"
 DEMO_EMAIL = "demo@example.com"
 DEMO_PASSWORD = "demo-password"  # override via env if needed (non-prod)
 
-async def hash_password(password: str) -> str:
-    return bcrypt.hash(password)
+def hash_password(password: str) -> str:
+    return pwd_context.hash(password)
 
 async def create_user(payload: UserCreate) -> UserOut:
     # prevent admin assignment via client
@@ -23,7 +25,7 @@ async def create_user(payload: UserCreate) -> UserOut:
     found = await DatabasePool.fetch_one(exists_q, payload.username, payload.email)
     if found:
         raise ValueError("username_or_email_already_exists")
-    pwd_hash = await hash_password(payload.password)
+    pwd_hash = hash_password(payload.password)
     insert_q = """
         INSERT INTO users (id, username, email, password_hash, role)
         VALUES (gen_random_uuid(), $1, $2, $3, $4)
