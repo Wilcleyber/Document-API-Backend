@@ -18,7 +18,7 @@ class NodeUpdate(BaseModel):
 class NodeOut(BaseModel):
     """Response com dados do node."""
     id: Union[UUID, str]
-    parent_id: Optional[str]
+    parent_id: Optional[Union[UUID, str]]
     type: str
     name: str
     created_at: datetime
