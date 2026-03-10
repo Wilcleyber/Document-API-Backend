@@ -1,6 +1,6 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from typing import Optional
+from typing import Optional, List, Union
 from src.auth.service import decode_token
 from src.auth.schemas import TokenPayload
 from src.core.logging_config import get_logger

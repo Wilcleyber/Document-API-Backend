@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, status, Depends
-from typing import Optional, List
+from typing import Optional, List, Union
 from src.nodes.schemas import NodeCreate, NodeUpdate, NodeOut
 from src.nodes import service
 from src.authorization import require_manage_node, require_admin
@@ -38,7 +38,7 @@ async def create_node(
 
 @router.get("/{node_id}", response_model=NodeOut)
 async def get_node(
-    node_id: str,
+    node_id: Union[UUID, str],
     current_user: TokenPayload = Depends(get_current_user),
 ):
     """Retorna dados de um node."""
@@ -49,7 +49,7 @@ async def get_node(
 
 @router.get("/{node_id}/children", response_model=List[NodeOut])
 async def list_node_children(
-    node_id: str,
+    node_id: Union[UUID, str],
     current_user: TokenPayload = Depends(get_current_user),
 ):
     """Lista filhos diretos de um node."""
@@ -90,7 +90,7 @@ async def list_root_nodes(
 
 @router.patch("/{node_id}", response_model=NodeOut)
 async def update_node(
-    node_id: str,
+    node_id: Union[UUID, str],
     payload: NodeUpdate,
     current_user: TokenPayload = Depends(require_manage_node()),
 ):
@@ -121,7 +121,7 @@ async def update_node(
 
 @router.delete("/{node_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_node(
-    node_id: str,
+    node_id: Union[UUID, str],
     current_user: TokenPayload = Depends(require_manage_node()),
 ):
     """

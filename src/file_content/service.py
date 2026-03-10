@@ -1,4 +1,4 @@
-from typing import Optional, Dict
+from typing import Optional, List, Union, Dict
 from datetime import datetime
 import hashlib
 
@@ -10,7 +10,7 @@ logger = get_logger(__name__)
 def _compute_etag(content: str) -> str:
     return hashlib.sha256(content.encode("utf-8")).hexdigest()
 
-async def _ensure_is_file(file_id: str) -> None:
+async def _ensure_is_file(file_id: Union[UUID, str]) -> None:
     q = "SELECT id, type FROM items WHERE id = $1 LIMIT 1"
     row = await DatabasePool.fetch_one(q, file_id)
     if not row:
@@ -18,7 +18,7 @@ async def _ensure_is_file(file_id: str) -> None:
     if row.get("type") != "FILE":
         raise TypeError("not_a_file")
 
-async def get_file_content(file_id: str) -> Dict[str, Optional[str]]:
+async def get_file_content(file_id: Union[UUID, str]) -> Dict[str, Optional[str]]:
     """
     Retorna content e updated_at (se existir), garantido que o item existe e é FILE.
     If no content row exists, returns empty content with updated_at as None.
@@ -36,7 +36,7 @@ async def get_file_content(file_id: str) -> Dict[str, Optional[str]]:
     etag = _compute_etag(content)
     return {"content": content, "updated_at": updated_at, "etag": etag}
 
-async def save_file_content(file_id: str, content: str, user_id: Optional[str] = None) -> Dict[str, Optional[str]]:
+async def save_file_content(file_id: Union[UUID, str], content: str, user_id: Optional[str] = None) -> Dict[str, Optional[str]]:
     """
     Upsert content for file_id. Returns content, updated_at and etag.
     Attempts to set last_modified_by if column exists (non-fatal).

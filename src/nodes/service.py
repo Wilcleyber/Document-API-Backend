@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Union
 from src.db.connection import DatabasePool
 from src.db.transactions import TransactionManager
 from src.nodes.schemas import NodeCreate, NodeUpdate, NodeOut
@@ -49,7 +49,7 @@ async def create_node(payload: NodeCreate) -> NodeOut:
     logger.info(f"Node created: {row['id']} (type={payload.type}, name={payload.name})")
     return NodeOut(**row)
 
-async def get_node_by_id(node_id: str) -> Optional[NodeOut]:
+async def get_node_by_id(node_id: Union[UUID, str]) -> Optional[NodeOut]:
     """Retorna um node por ID."""
     q = """
         SELECT id, parent_id, type, name, created_at, updated_at
@@ -75,7 +75,7 @@ async def list_root() -> List[NodeOut]:
     """Lista nodes na raiz (parent_id IS NULL)."""
     return await list_children(parent_id=None)
 
-async def _get_descendants(node_id: str) -> List[str]:
+async def _get_descendants(node_id: Union[UUID, str]) -> List[str]:
     """
     Query recursiva que retorna IDs de todos os descendentes.
     Usado para validar ciclos e delete_cascade.
@@ -92,7 +92,7 @@ async def _get_descendants(node_id: str) -> List[str]:
     rows = await DatabasePool.fetch_all(q, node_id)
     return [row["id"] for row in rows]
 
-async def _validate_move(node_id: str, new_parent_id: Optional[str]) -> bool:
+async def _validate_move(node_id: Union[UUID, str], new_parent_id: Optional[str]) -> bool:
     """
     Valida se é seguro mover node_id para new_parent_id.
     Retorna False se causaria ciclo (new_parent é descendente de node).
@@ -110,7 +110,7 @@ async def _validate_move(node_id: str, new_parent_id: Optional[str]) -> bool:
     
     return True
 
-async def update_node(node_id: str, payload: NodeUpdate) -> NodeOut:
+async def update_node(node_id: Union[UUID, str], payload: NodeUpdate) -> NodeOut:
     """
     Atualiza node (rename e/ou move).
     Valida ciclos antes de mover.
@@ -165,7 +165,7 @@ async def update_node(node_id: str, payload: NodeUpdate) -> NodeOut:
     logger.info(f"Node updated: {node_id} (name={new_name}, parent_id={new_parent_id})")
     return NodeOut(**row)
 
-async def delete_node(node_id: str) -> None:
+async def delete_node(node_id: Union[UUID, str]) -> None:
     """
     Deleta node e todos seus descendentes (cascata).
     """

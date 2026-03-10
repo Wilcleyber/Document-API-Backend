@@ -1,7 +1,7 @@
 import jwt
 from datetime import datetime, timedelta
 from passlib.hash import bcrypt
-from typing import Optional
+from typing import Optional, List, Union
 from src.db.connection import DatabasePool
 from src.auth.schemas import TokenResponse, TokenPayload
 from src.core.config import settings
@@ -37,7 +37,7 @@ async def authenticate_user(username: str, password: str) -> Optional[dict]:
     logger.info(f"Successful login for user: {username}")
     return user_row
 
-def create_access_token(user_id: str, username: str, role: str) -> TokenResponse:
+def create_access_token(user_id: Union[UUID, str], username: str, role: str) -> TokenResponse:
     """
     Cria JWT com payload contenho user_id e role.
     Expiração: configurável via env (padrão: 15 minutos).

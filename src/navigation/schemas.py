@@ -1,10 +1,11 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, Union
+from uuid import UUID
 
 class BreadcrumbItem(BaseModel):
     """Item no breadcrumb."""
-    id: str
+    id: Union[UUID, str]
     name: str
     type: str
 
@@ -15,24 +16,28 @@ class PathResponse(BaseModel):
 
 class TreeNode(BaseModel):
     """Node com children para listagem recursiva."""
-    id: str
+    id: Union[UUID, str]
     name: str
     type: str
-    parent_id: Optional[str]
+    parent_id: Optional[Union[UUID, str]]
     created_at: datetime
     updated_at: datetime
     children: List["TreeNode"] = []
 
-TreeNode.update_forward_refs()
+    model_config = ConfigDict(from_attributes=True)
+
+TreeNode.model_rebuild()
 
 class SearchResult(BaseModel):
     """Resultado de busca com caminho completo."""
-    id: str
+    id: Union[UUID, str]
     name: str
     type: str
     path: str  # Ex: "Home > Documentos"
     created_at: datetime
     updated_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
 
 class PaginatedSearchResults(BaseModel):
     """Resultados paginados de busca."""

@@ -11,7 +11,7 @@ from src.core.logging_config import get_logger
 
 logger = get_logger(__name__)
 
-async def get_path(node_id: str) -> PathResponse:
+async def get_path(node_id: Union[UUID, str]) -> PathResponse:
     """
     Retorna breadcrumb (caminho completo) de um node até a raiz.
     Query única com CTE recursiva (ancestors).
@@ -39,7 +39,7 @@ async def get_path(node_id: str) -> PathResponse:
     
     return PathResponse(path=breadcrumb, full_path=full_path)
 
-async def list_recursive(node_id: str, max_depth: int = 10) -> TreeNode:
+async def list_recursive(node_id: Union[UUID, str], max_depth: int = 10) -> TreeNode:
     """
     Lista árvore recursiva até max_depth níveis.
     Retorna estrutura hierárquica completa.
@@ -193,7 +193,7 @@ async def search(
         results=results,
     )
 
-async def get_full_path_string(node_id: str) -> str:
+async def get_full_path_string(node_id: Union[UUID, str]) -> str:
     """
     Retorna apenas a string do caminho completo.
     Ex: "Home > Documentos > Faculdade"
@@ -201,7 +201,7 @@ async def get_full_path_string(node_id: str) -> str:
     path_response = await get_path(node_id)
     return path_response.full_path
 
-async def get_siblings(node_id: str) -> List[Dict]:
+async def get_siblings(node_id: Union[UUID, str]) -> List[Dict]:
     """
     Retorna os irmãos (nodes com mesmo parent_id).
     """
@@ -223,7 +223,7 @@ async def get_siblings(node_id: str) -> List[Dict]:
     rows = await DatabasePool.fetch_all(siblings_q, parent_id, node_id)
     return [dict(row) for row in rows]
 
-async def count_descendants(node_id: str) -> int:
+async def count_descendants(node_id: Union[UUID, str]) -> int:
     """
     Conta total de descendentes (sem incluir o próprio node).
     """
@@ -239,7 +239,7 @@ async def count_descendants(node_id: str) -> int:
     result = await DatabasePool.fetch_one(q, node_id)
     return result["count"] if result else 0
 
-async def get_directory_stats(node_id: str) -> Dict:
+async def get_directory_stats(node_id: Union[UUID, str]) -> Dict:
     """
     Retorna estatísticas de um diretório:
     total files, total folders, total size (se implementado).

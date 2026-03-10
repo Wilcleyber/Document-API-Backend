@@ -30,7 +30,7 @@ async def demo_credentials():
 
 
 @router.get("/{user_id}", response_model=UserOut)
-async def get_user(user_id: str):
+async def get_user(user_id: Union[UUID, str]):
     user = await service.get_user_by_id(user_id)
     if not user:
         raise HTTPException(status_code=404, detail="user_not_found")

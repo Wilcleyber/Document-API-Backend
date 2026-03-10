@@ -11,7 +11,7 @@ router = APIRouter(prefix="/files", tags=["files"])
 
 @router.get("/{file_id}/content", response_model=FileContentOut)
 async def get_content(
-    file_id: str,
+    file_id: Union[UUID, str],
     response: Response,
     current_user: TokenPayload = Depends(get_current_user),
 ):
@@ -30,7 +30,7 @@ async def get_content(
 
 @router.put("/{file_id}/content", response_model=FileContentOut)
 async def put_content(
-    file_id: str,
+    file_id: Union[UUID, str],
     payload: FileContentUpdate,
     request: Request,
     current_user: TokenPayload = Depends(require_edit_permission("file_id")),

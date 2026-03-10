@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Union
 from src.db.connection import DatabasePool
 from src.db.transactions import TransactionManager
 
@@ -6,7 +6,7 @@ class DatabaseUtils:
     """Utilitários para operações comuns no banco de dados."""
 
     @staticmethod
-    async def fetch_by_id(item_id: str) -> Optional[dict]:
+    async def fetch_by_id(item_id: Union[UUID, str]) -> Optional[dict]:
         """Busca um item por ID."""
         query = """
             SELECT id, parent_id, type, name, created_at, updated_at
@@ -15,7 +15,7 @@ class DatabaseUtils:
         return await DatabasePool.fetch_one(query, item_id)
 
     @staticmethod
-    async def list_children(parent_id: str) -> List[dict]:
+    async def list_children(parent_id: Union[UUID, str]) -> List[dict]:
         """Lista todos os filhos diretos de um parent."""
         query = """
             SELECT id, parent_id, type, name, created_at, updated_at
@@ -25,7 +25,7 @@ class DatabaseUtils:
         return await DatabasePool.fetch_all(query, parent_id)
 
     @staticmethod
-    async def delete_cascade(item_id: str) -> None:
+    async def delete_cascade(item_id: Union[UUID, str]) -> None:
         """
         Exclusão em cascata lógica (com transação).
         Opção: ON DELETE CASCADE no FK (automático no DB).
@@ -44,7 +44,7 @@ class DatabaseUtils:
             await conn.execute(query, item_id)
 
     @staticmethod
-    async def get_file_content(file_id: str) -> Optional[str]:
+    async def get_file_content(file_id: Union[UUID, str]) -> Optional[str]:
         """Retorna o conteúdo de um arquivo."""
         query = """
             SELECT content FROM file_contents WHERE file_id = $1
@@ -53,7 +53,7 @@ class DatabaseUtils:
         return result['content'] if result else None
 
     @staticmethod
-    async def save_file_content(file_id: str, content: str) -> None:
+    async def save_file_content(file_id: Union[UUID, str], content: str) -> None:
         """Salva ou atualiza conteúdo de arquivo."""
         query = """
             INSERT INTO file_contents (file_id, content)

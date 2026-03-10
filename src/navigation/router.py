@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, status, Depends, Query
-from typing import Optional
+from typing import Optional, List, Union
 from src.navigation.schemas import (
     PathResponse,
     TreeNode,
@@ -16,7 +16,7 @@ router = APIRouter(prefix="/navigation", tags=["navigation"])
 
 @router.get("/{node_id}/path", response_model=PathResponse)
 async def get_breadcrumb(
-    node_id: str,
+    node_id: Union[UUID, str],
     current_user: TokenPayload = Depends(get_current_user),
 ):
     """
@@ -36,7 +36,7 @@ async def get_breadcrumb(
 
 @router.get("/{node_id}/tree", response_model=TreeNode)
 async def get_tree_recursive(
-    node_id: str,
+    node_id: Union[UUID, str],
     depth: int = Query(10, ge=1, le=20),
     current_user: TokenPayload = Depends(get_current_user),
 ):
@@ -81,7 +81,7 @@ async def search_nodes(
 
 @router.get("/{node_id}/siblings", response_model=list)
 async def get_siblings(
-    node_id: str,
+    node_id: Union[UUID, str],
     current_user: TokenPayload = Depends(get_current_user),
 ):
     """
@@ -100,7 +100,7 @@ async def get_siblings(
 
 @router.get("/{node_id}/stats", response_model=dict)
 async def get_stats(
-    node_id: str,
+    node_id: Union[UUID, str],
     current_user: TokenPayload = Depends(get_current_user),
 ):
     """
@@ -116,7 +116,7 @@ async def get_stats(
 
 @router.get("/{node_id}/path-string")
 async def get_path_string(
-    node_id: str,
+    node_id: Union[UUID, str],
     current_user: TokenPayload = Depends(get_current_user),
 ):
     """

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List, Union
 from src.auth.schemas import TokenPayload
 from src.nodes.schemas import NodeCreate, NodeUpdate, NodeOut
 from src.nodes import service as node_service
@@ -84,7 +84,7 @@ async def create_file(
 
 async def rename_node(
     user: TokenPayload,
-    node_id: str,
+    node_id: Union[UUID, str],
     new_name: str
 ) -> NodeOut:
     """
@@ -121,7 +121,7 @@ async def rename_node(
 
 async def move_node(
     user: TokenPayload,
-    node_id: str,
+    node_id: Union[UUID, str],
     new_parent_id: Optional[str] = None
 ) -> NodeOut:
     """
@@ -151,7 +151,7 @@ async def move_node(
         logger.warning(f"Move failed: {str(e)}")
         raise
 
-async def delete_node(user: TokenPayload, node_id: str) -> dict:
+async def delete_node(user: TokenPayload, node_id: Union[UUID, str]) -> dict:
     """
     Deleta node e toda sua subárvore (cascade).
     Requer confirmação de role ADMIN.

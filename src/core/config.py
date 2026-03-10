@@ -1,5 +1,5 @@
-from pydantic_settings import BaseSettings
-from typing import Optional
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from typing import Optional, List, Union
 import os
 
 class Settings(BaseSettings):
@@ -37,9 +37,12 @@ class Settings(BaseSettings):
     # Ambiente
     environment: str = "development"  # development, staging, production
     
-    class Config:
-        env_file = ".env"
-        case_sensitive = False
+    # A configuração agora usa o model_config moderno do Pydantic V2
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        case_sensitive=False,
+        extra="ignore" # Isso aqui é ouro: evita que o app quebre se tiver lixo no seu .env
+    )
 
     @property
     def is_production(self) -> bool:

@@ -1,5 +1,5 @@
 import asyncpg
-from typing import Optional
+from typing import Optional, List, Union
 from src.core.config import Settings
 
 class DatabasePool:

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List, Union
 from src.auth.schemas import TokenPayload
 from src.db.connection import DatabasePool
 
@@ -6,7 +6,7 @@ async def can_manage_node(user: TokenPayload) -> bool:
     """ADMIN only."""
     return getattr(user, "role", None) == "ADMIN"
 
-async def can_edit_content(user: TokenPayload, file_id: str) -> bool:
+async def can_edit_content(user: TokenPayload, file_id: Union[UUID, str]) -> bool:
     """
     USERs may edit files they are allowed to (simple global policy).
     ADMIN can always edit.

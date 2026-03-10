@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, status, Depends
-from typing import Optional, List
+from typing import Optional, List, Union
 
 from src.admin_ops.schemas import (
     CreateFolderRequest,
@@ -87,7 +87,7 @@ async def create_file(
 
 @router.patch("/{node_id}/rename", response_model=AdminNodeOut)
 async def rename_node(
-    node_id: str,
+    node_id: Union[UUID, str],
     payload: RenameFolderRequest,
     current_user: TokenPayload = Depends(require_admin()),
 ):
@@ -117,7 +117,7 @@ async def rename_node(
 
 @router.patch("/{node_id}/move", response_model=AdminNodeOut)
 async def move_node(
-    node_id: str,
+    node_id: Union[UUID, str],
     payload: MoveNodeRequest,
     current_user: TokenPayload = Depends(require_admin()),
 ):
@@ -148,7 +148,7 @@ async def move_node(
 
 @router.delete("/{node_id}", response_model=AdminOperationResponse)
 async def delete_node(
-    node_id: str,
+    node_id: Union[UUID, str],
     current_user: TokenPayload = Depends(require_admin()),
 ):
     """

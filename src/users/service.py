@@ -1,5 +1,5 @@
 from passlib.context import CryptContext
-from typing import Optional
+from typing import Optional, List, Union
 from src.db.connection import DatabasePool
 from src.users.schemas import UserCreate, UserOut, DemoCredentials
 from src.core.config import settings
@@ -34,7 +34,7 @@ async def create_user(payload: UserCreate) -> UserOut:
     row = await DatabasePool.fetch_one(insert_q, payload.username, payload.email, pwd_hash, role)
     return UserOut(**row)
 
-async def get_user_by_id(user_id: str) -> Optional[UserOut]:
+async def get_user_by_id(user_id: Union[UUID, str]) -> Optional[UserOut]:
     q = "SELECT id, username, email, role, created_at FROM users WHERE id = $1"
     row = await DatabasePool.fetch_one(q, user_id)
     return UserOut(**row) if row else None
