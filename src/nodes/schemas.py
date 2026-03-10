@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, ConfigDict
 from datetime import datetime
-ffrom typing import Optional, List, Union, Union, List
+from typing import Optional, List, Union, Union, List
 from uuid import UUID
 
 class NodeCreate(BaseModel):
