@@ -47,7 +47,7 @@ def create_access_token(user_id: str, username: str, role: str) -> TokenResponse
     exp_timestamp = int(expires_at.timestamp())
     
     payload = {
-        "user_id": user_id,
+        "user_id": str(user_id),
         "username": username,
         "role": role,
         "exp": exp_timestamp,
