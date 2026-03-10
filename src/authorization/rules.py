@@ -1,4 +1,5 @@
 from typing import Optional, List, Union
+from uuid import UUID
 from src.auth.schemas import TokenPayload
 from src.db.connection import DatabasePool
 

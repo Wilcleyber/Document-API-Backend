@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, status, Depends, Query
 from typing import Optional, List, Union
+from uuid import UUID
 from src.navigation.schemas import (
     PathResponse,
     TreeNode,

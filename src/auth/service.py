@@ -2,6 +2,7 @@ import jwt
 from datetime import datetime, timedelta
 from passlib.hash import bcrypt
 from typing import Optional, List, Union
+from uuid import UUID
 from src.db.connection import DatabasePool
 from src.auth.schemas import TokenResponse, TokenPayload
 from src.core.config import settings

@@ -1,5 +1,6 @@
 from passlib.context import CryptContext
 from typing import Optional, List, Union
+from uuid import UUID
 from src.db.connection import DatabasePool
 from src.users.schemas import UserCreate, UserOut, DemoCredentials
 from src.core.config import settings

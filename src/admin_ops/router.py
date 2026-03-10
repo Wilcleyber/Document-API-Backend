@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from typing import Optional, List, Union
+from uuid import UUID
 
 from src.admin_ops.schemas import (
     CreateFolderRequest,

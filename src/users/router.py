@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, status
+from uuid import UUID
 from src.users.schemas import UserCreate, UserOut, DemoCredentials
 from src.users import service
 from src.core.logging_config import get_logger

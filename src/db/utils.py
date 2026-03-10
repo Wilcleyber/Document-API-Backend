@@ -1,4 +1,5 @@
 from typing import Optional, List, Union
+from uuid import UUID
 from src.db.connection import DatabasePool
 from src.db.transactions import TransactionManager
 

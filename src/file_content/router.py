@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, status, Depends, Response, Request
+from uuid import UUID
 from src.file_content.schemas import FileContentOut, FileContentUpdate
 from src.file_content import service
 from src.auth.dependencies import get_current_user

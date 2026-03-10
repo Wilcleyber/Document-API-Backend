@@ -1,4 +1,5 @@
 from typing import List, Optional, Dict
+from uuid import UUID
 from src.db.connection import DatabasePool
 from src.navigation.schemas import (
     BreadcrumbItem,

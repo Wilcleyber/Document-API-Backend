@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from typing import Optional, List, Union
+from uuid import UUID
 from src.nodes.schemas import NodeCreate, NodeUpdate, NodeOut
 from src.nodes import service
 from src.authorization import require_manage_node, require_admin

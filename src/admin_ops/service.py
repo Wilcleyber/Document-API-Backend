@@ -1,4 +1,5 @@
 from typing import Optional, List, Union
+from uuid import UUID
 from src.auth.schemas import TokenPayload
 from src.nodes.schemas import NodeCreate, NodeUpdate, NodeOut
 from src.nodes import service as node_service
