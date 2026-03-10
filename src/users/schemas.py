@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, ConfigDict
 from typing import Optional
 from datetime import datetime
 from uuid import UUID
@@ -9,14 +9,13 @@ class UserCreate(BaseModel):
     password: str = Field(..., min_length=8)
 
 class UserOut(BaseModel):
-    id: Union[str, UUID]
+    id: UUID
     username: str
     email: EmailStr
     role: str
     created_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class DemoCredentials(BaseModel):
     username: str
