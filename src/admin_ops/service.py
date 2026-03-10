@@ -14,7 +14,7 @@ def _ensure_admin(user: TokenPayload) -> None:
         logger.warning(f"Non-admin attempted admin operation: {user.user_id}")
         raise PermissionError("admin_access_required")
 
-async def create_folder(user: TokenPayload, folder_name: str, parent_id: Optional[str] = None) -> NodeOut:
+async def create_folder(user: TokenPayload, folder_name: str, parent_id: Optional[Union[UUID, str]] = None) -> NodeOut:
     """
     Cria pasta sob supervisão admin.
     Encapsula create_node com validações extras.
@@ -44,7 +44,7 @@ async def create_folder(user: TokenPayload, folder_name: str, parent_id: Optiona
 async def create_file(
     user: TokenPayload,
     file_name: str,
-    parent_id: Optional[str] = None,
+    parent_id: Optional[Union[UUID, str]] = None,
     initial_content: str = ""
 ) -> NodeOut:
     """
@@ -123,7 +123,7 @@ async def rename_node(
 async def move_node(
     user: TokenPayload,
     node_id: Union[UUID, str],
-    new_parent_id: Optional[str] = None
+    new_parent_id: Optional[Union[UUID, str]] = None
 ) -> NodeOut:
     """
     Move node para outro parent.

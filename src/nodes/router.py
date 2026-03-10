@@ -63,7 +63,7 @@ async def list_node_children(
 
 @router.get("", response_model=List[NodeOut])
 async def list_nodes(
-    parent_id: Optional[str] = None,
+    parent_id: Optional[Union[UUID, str]] = None,
     current_user: TokenPayload = Depends(get_current_user),
 ):
     """

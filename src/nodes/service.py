@@ -59,7 +59,7 @@ async def get_node_by_id(node_id: Union[UUID, str]) -> Optional[NodeOut]:
     row = await DatabasePool.fetch_one(q, node_id)
     return NodeOut(**row) if row else None
 
-async def list_children(parent_id: Optional[str] = None) -> List[NodeOut]:
+async def list_children(parent_id: Optional[Union[UUID, str]] = None) -> List[NodeOut]:
     """
     Lista filhos diretos de um parent.
     Se parent_id é None, retorna raiz.
@@ -93,7 +93,7 @@ async def _get_descendants(node_id: Union[UUID, str]) -> List[str]:
     rows = await DatabasePool.fetch_all(q, node_id)
     return [row["id"] for row in rows]
 
-async def _validate_move(node_id: Union[UUID, str], new_parent_id: Optional[str]) -> bool:
+async def _validate_move(node_id: Union[UUID, str], new_parent_id: Optional[Union[UUID, str]]) -> bool:
     """
     Valida se é seguro mover node_id para new_parent_id.
     Retorna False se causaria ciclo (new_parent é descendente de node).
@@ -189,7 +189,7 @@ async def delete_node(node_id: Union[UUID, str]) -> None:
     
     logger.info(f"Node deleted: {node_id} (cascade delete)")
 
-async def get_tree(parent_id: Optional[str] = None) -> dict:
+async def get_tree(parent_id: Optional[Union[UUID, str]] = None) -> dict:
     """
     Retorna árvore completa a partir de um parent.
     Estrutura recursiva com children.

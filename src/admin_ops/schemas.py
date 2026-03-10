@@ -39,7 +39,7 @@ class AdminNodeOut(BaseModel):
     id: Union[UUID, str]
     name: str
     type: str
-    parent_id: Optional[str]
+    parent_id: Optional[Union[UUID, str]]
     created_at: datetime
     updated_at: datetime
 

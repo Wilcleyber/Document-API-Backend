@@ -64,7 +64,7 @@ class DatabaseUtils:
         await DatabasePool.execute(query, file_id, content)
 
     @staticmethod
-    async def get_tree(parent_id: Optional[str] = None) -> List[dict]:
+    async def get_tree(parent_id: Optional[Union[UUID, str]] = None) -> List[dict]:
         """Retorna a árvore de itens (com recursão otimizada)."""
         query = """
             WITH RECURSIVE tree AS (
