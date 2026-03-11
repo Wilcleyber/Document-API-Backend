@@ -25,7 +25,7 @@ class Settings(BaseSettings):
         "http://localhost:3000",
         "http://localhost:5173",
         "https://github.com",
-        "https://documentapi-mu.vercel.app",
+        "https://teste-phi-eosin.vercel.app",
     ]
     cors_allow_credentials: bool = True
     cors_allow_methods: list[str] = ["*"]
