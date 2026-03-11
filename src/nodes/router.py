@@ -37,6 +37,14 @@ async def create_node(
         logger.error(f"Error creating node: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail="internal_server_error")
 
+@router.get("/root", response_model=List[NodeOut])
+async def list_root_nodes(
+    current_user: TokenPayload = Depends(get_current_user),
+):
+    """Lista nodes na raiz."""
+    nodes = await service.list_root()
+    return nodes
+
 @router.get("/{node_id}", response_model=NodeOut)
 async def get_node(
     node_id: Union[UUID, str],
@@ -81,13 +89,7 @@ async def list_nodes(
     
     return nodes
 
-@router.get("/root", response_model=List[NodeOut])
-async def list_root_nodes(
-    current_user: TokenPayload = Depends(get_current_user),
-):
-    """Lista nodes na raiz."""
-    nodes = await service.list_root()
-    return nodes
+
 
 @router.patch("/{node_id}", response_model=NodeOut)
 async def update_node(
